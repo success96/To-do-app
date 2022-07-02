@@ -1,5 +1,4 @@
 //#############     CONNECTING TO MONGODB CLUSTERS   #############
-const uuid = require("uuid");
 const { MongoClient } = require("mongodb");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -15,7 +14,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const dbName = "tasksDb";
 
 //This function is to test the DB connection
-exports.serverTestt =  () => {
+exports.serverTest =  async function (req, res) {
     async function run () {
         try {
             await client.connect()
@@ -34,13 +33,14 @@ exports.serverTestt =  () => {
 
 
 //This route is to create a DB Collection (table) 
-exports.createTasksDb = async () => {
+exports.createTasksDb = async (req, res) => {
     try {
          await client.connect();
          console.log("Connected correctly to server");
          const db = client.db(dbName);
          // Use the collection "tasks"
          db.collection("tasks");
+         res.json({message: "Database Successfully created!"})
     } catch (err) {
          console.log(err.message);
      }
@@ -101,7 +101,7 @@ exports.alltasks = async (req, res) => {
     }
 }
 
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
     //fetch a particular task with the given id
     //search for the required task from the task DB
     //send the task details corresponding to given id as response to the client
@@ -128,7 +128,7 @@ exports.findOne = (req, res) => {
     }
 }
 
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
     try {
         await client.connect();
         console.log("Connected correctly to server");
@@ -146,7 +146,7 @@ exports.update = (req, res) => {
     }
 }
 
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
     //To delete an existing flight
     try {
         await client.connect();

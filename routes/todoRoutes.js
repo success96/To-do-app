@@ -4,6 +4,7 @@ const router = express.Router();
 const controller = require('../controllers/todoController');
 //Testing server
 router.get("/", controller.serverTest);
+router.get("/createDb", controller.createTasksDb);
 
 //endpoint to add a new task
 router.post('/', controller.add)
