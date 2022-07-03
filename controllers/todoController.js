@@ -45,7 +45,7 @@ exports.createTasksDb = async (req, res) => {
          console.log(err.message);
      }
      finally {
-        await tasks.client.close();
+        await client.close();
     }
 }
 
@@ -71,13 +71,14 @@ exports.add = async (req, res) => {
         client.db(dbName).collection("tasks").insertOne(task);
         res.status(201).json({
             message: "Todo task successfully added",
-            flight,
+            task,
         })
 
     } catch (err) {
         res.status(500).json({message: err.message})
     } finally {
-        await client.close();
+        //await client.close();
+        setTimeout(() => {client.close()}, 1500); // This is to allow the server to wait for some time before closing
     }
 }
 
@@ -89,7 +90,7 @@ exports.alltasks = async (req, res) => {
 
         let _id = req.params.id;
         
-        const tasks = await client.db(dbName).collection("tasks").findOne({ });
+        const tasks = await client.db(dbName).collection("tasks").find({ });
         res.status(201).json({
             "message": "These are all todo tasks",
             "tasks": tasks
@@ -97,7 +98,7 @@ exports.alltasks = async (req, res) => {
     } catch (err) {
         res.status(500).json({message: err.message})
     } finally {
-        await tasks.client.close();
+        await client.close();
     }
 }
 
